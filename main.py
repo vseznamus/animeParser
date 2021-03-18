@@ -37,6 +37,7 @@ def get_name(html):
 
 def parse():
     anime_url = input('Введите ссылку на JUT.SU страницу аниме (например: https://jut.su/ao-no-exorcist/): ---> ')
+    folder = str(input('Укажите путь (!!!скопируйте путь с проводника!!!): ---->   ')).replace('\\', '/') + '/'
     start = int(input('Скачать серии от (введите порядковый номер): ------>  '))
     end = int(input('Скачать серии до (введите порядковый номер): ------->   '))
     for i in range(start - 1, end):
@@ -46,7 +47,7 @@ def parse():
             if get_links_to_player(html) != -1:
                 link = get_links_to_player(html)
                 bytes = requests.get(link, headers=HEADERS)
-                with open(get_name(html) + '.mp4', 'wb') as file:
+                with open(folder + get_name(html) + '.mp4', 'wb') as file:
                     file.write(bytes.content)
                 print("Скачивание " + get_name(html) + ' завершено')
             else:

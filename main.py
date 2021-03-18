@@ -27,19 +27,25 @@ def get_links_to_player(html):
     return items[0]['src']
 
 
+def get_name(html):
+    soup = BeautifulSoup(html.text, 'html.parser')
+    items = soup.find_all('span', itemprop='name')
+    return items[0].text.replace('Смотреть ', '')
+
+
 def parse():
-    start = int(input('Скачать серии от (введите номер): ------>  '))
-    end = int(input('Скачать серии до (введите номер): ------->   '))
-    counter = start - 1
+    anime_url = input('Введите ссылку на страницу аниме (например: https://jut.su/ao-no-exorcist/): ---> ')
+    start = int(input('Скачать серии от (введите порядковый номер): ------>  '))
+    end = int(input('Скачать серии до (введите порядковый номер): ------->   '))
     for i in range(start - 1, end):
-        html = get_html(URL + get_links_from_green(get_html(URL + '/one-piece/'))[i])
+        html = get_html(URL + get_links_from_green(get_html(anime_url))[i])
+        print(f'Скачивание ' + '"' + get_name(html) + '"' + '...')
         if html.status_code == 200:
             link = get_links_to_player(html)
             bytes = requests.get(link, headers=HEADERS)
-            counter += 1
-            print(f'Скачивание {counter} серии... ')
-            with open(f'{counter}.mp4', 'wb') as file:
+            with open(get_name(html) + '.mp4', 'wb') as file:
                 file.write(bytes.content)
+            print("Скачивание " + get_name(html) + ' завершено')
         else:
             print("НЕТ ОТВЕТА ОТ СЕРВЕРА")
 

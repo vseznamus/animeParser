@@ -35,11 +35,16 @@ def get_name(html):
     return items[0].text.replace('Смотреть ', '')
 
 
-def parse():
+def get_data():
     anime_url = input('Введите ссылку на JUT.SU страницу аниме (например: https://jut.su/ao-no-exorcist/): ---> ')
-    folder = str(input('Укажите путь, куда будет скачан файл (!!!скопируйте путь с проводника!!!): ---->   ')).replace('\\', '/') + '/'
+    folder = str(input('Укажите путь, куда будет скачан файл (!!!скопируйте путь с проводника!!!): ---->   ')).replace(
+        '\\', '/') + '/'
     start = int(input('Скачать серии от (введите порядковый номер): ------>  '))
     end = int(input('Скачать серии до (введите порядковый номер): ------->   '))
+    return anime_url, folder, start, end
+
+
+def parse(anime_url, folder, start, end):
     for i in range(start - 1, end):
         html = get_html(URL + get_links_from_green(get_html(anime_url))[i])
         print(f'Скачивание ' + '"' + get_name(html) + '"' + '...')
@@ -57,4 +62,6 @@ def parse():
             print("НЕТ ОТВЕТА ОТ СЕРВЕРА")
 
 
-parse()
+if __name__ == '__main__':
+    url, f, s, e = get_data()
+    parse(url, f, s, e)
